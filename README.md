@@ -1,7 +1,7 @@
 作業報告：簡單線性迴歸分析 (Simple Linear Regression Analysis)
 本專案旨在透過 Python (使用 Streamlit 框架) 解決一個簡單線性迴歸問題，並嚴格遵循 CRISP-DM (Cross-Industry Standard Process for Data Mining) 的六大步驟流程，達成互動式模型部署的目標。
 
->1. Business Understanding (商業理解)
+#1. Business Understanding (商業理解)
 目的 (Prompt):
 目標是建立一個互動式的應用程式，讓使用者能夠模擬線性資料 Y=aX+b+ϵ 的生成過程，並訓練一個簡單線性迴歸模型來估計真實的參數 a (斜率) 和 b (截距)。最終需比較模型估計值與使用者設定的真實值之間的差異，並識別高殘差的離群值 (Outliers)。
 

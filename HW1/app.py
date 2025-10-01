@@ -4,6 +4,18 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 
+# --- Matplotlib Font Configuration for Chinese ---
+# 設置支持中文的字體，以解決圖表上文字顯示為方塊的問題。
+# 'Microsoft JhengHei' (微軟正黑體) 常用於繁體中文環境。
+try:
+    plt.rcParams['font.sans-serif'] = ['Microsoft JhengHei', 'SimHei', 'sans-serif']
+    plt.rcParams['axes.unicode_minus'] = False # 解決負號'-'顯示為方塊的問題
+except Exception as e:
+    # 如果特定字體在運行環境中不存在，則跳過，保持默認設置
+    print(f"Font configuration failed: {e}") 
+    pass 
+# ------------------------------------------------
+
 # ------------------------------
 # Streamlit Page Setup
 # ------------------------------

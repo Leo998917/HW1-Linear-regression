@@ -8,17 +8,17 @@ from sklearn.linear_model import LinearRegression
 # Streamlit Page Setup
 # ------------------------------
 st.set_page_config(layout="wide", page_title="Linear Regression Demo")
-st.title("Linear Regression Visualization")
-st.markdown("Use the sidebar to adjust data generation parameters (Slope, Intercept, Noise, and Data Points).")
+st.title("線性迴歸視覺化 (含離群值分析)")
+st.markdown("使用側邊欄調整資料生成參數 (斜率、截距、雜訊水準和資料點數量)。")
 
 # ------------------------------
 # Sidebar - User Inputs
 # ------------------------------
-st.sidebar.header("Parameters")
-a = st.sidebar.slider("Slope (a)", -10.0, 10.0, 2.0, 0.1)
-b = st.sidebar.slider("Intercept (b)", -50.0, 50.0, 5.0, 1.0)
-noise = st.sidebar.slider("Noise level (Noise)", 0.0, 20.0, 5.0, 0.5)
-n_points = st.sidebar.slider("Number of data points", 10, 500, 100, 10)
+st.sidebar.header("參數設定 (Parameters)")
+a = st.sidebar.slider("斜率 (Slope, a)", -10.0, 10.0, 2.0, 0.1)
+b = st.sidebar.slider("截距 (Intercept, b)", -50.0, 50.0, 5.0, 1.0)
+noise = st.sidebar.slider("雜訊水準 (Noise level)", 0.0, 20.0, 5.0, 0.5)
+n_points = st.sidebar.slider("資料點數量 (N points)", 10, 500, 100, 10)
 
 # ------------------------------
 # Generate Data
@@ -38,7 +38,7 @@ model.fit(X, y)
 y_pred = model.predict(X)
 
 # ------------------------------
-# Residuals (for outlier detection)
+# Residuals and DataFrame (for outlier detection)
 # ------------------------------
 residuals = np.abs(y - y_pred)
 df = pd.DataFrame({
@@ -47,44 +47,61 @@ df = pd.DataFrame({
     "y_pred": y_pred.flatten(),
     "residual": residuals.flatten()
 })
+# 根據殘差大小排序
 df_sorted = df.sort_values(by="residual", ascending=False)
+top_outliers = df_sorted.head(5) # 取得前 5 個最大的離群值
 
 # ------------------------------
-# Plot Data & Regression Line
+# Plot Data & Regression Line (HIGHLIGHTING OUTLIERS)
 # ------------------------------
-st.subheader("Data Scatter Plot and Fitted Line")
+st.subheader("資料點與迴歸線擬合結果")
+
 fig, ax = plt.subplots(figsize=(10, 5))
-ax.scatter(X, y, label="Generated Data (y)", alpha=0.6, color='#1f77b4')
-ax.plot(X, y_true, color="green", linestyle='--', label=f"True Line (y = {a}x + {b})", alpha=0.7)
-ax.plot(X, y_pred, color="red", label="Fitted Regression Line", linewidth=2)
 
-ax.set_title("Linear Regression Fit")
-ax.set_xlabel("X (Feature)")
-ax.set_ylabel("y (Target)")
+# 1. 繪製所有資料點 (作為背景)
+ax.scatter(df["X"], df["y"], label="所有資料點", alpha=0.5, color='#1f77b4')
+
+# 2. 突出顯示殘差最大的前 5 個離群值
+ax.scatter(
+    top_outliers["X"], 
+    top_outliers["y"], 
+    color="orange", 
+    s=120, # 放大標記尺寸
+    marker="D", # 使用菱形標記
+    edgecolors='black',
+    linewidths=1.5,
+    label=f"前 {len(top_outliers)} 個離群值"
+)
+
+# 3. 繪製真實線和擬合線
+ax.plot(X, y_true, color="green", linestyle='--', label=f"真實線 (y = {a:.2f}x + {b:.2f})", alpha=0.7)
+ax.plot(X, y_pred, color="red", label="擬合迴歸線", linewidth=2)
+
+ax.set_title("線性迴歸擬合結果與離群值")
+ax.set_xlabel("X 值")
+ax.set_ylabel("Y 值")
 ax.grid(True, linestyle=':', alpha=0.6)
 ax.legend()
 st.pyplot(fig)
 
 # ------------------------------
-# Show Model Coefficients
+# Show Model Coefficients (修復 TypeError)
 # ------------------------------
-st.subheader("Model Coefficients")
+st.subheader("模型係數結果")
 
-# 修正: 由於 y 是 2D 陣列，model.coef_ 是 [[a]] 格式，需使用 [0][0] 存取。
-# 截距 model.intercept_ 是 [b] 格式，需使用 [0] 存取。
-# 使用 .item() 確保它是一個標準 Python float。
+# 修正: 確保從 NumPy 陣列中提取單一浮點數
 estimated_slope = model.coef_[0][0].item()
 estimated_intercept = model.intercept_[0].item()
 
 st.info(f"""
-- **Estimated Slope (a):** `{estimated_slope:.3f}`
-- **Estimated Intercept (b):** `{estimated_intercept:.3f}`
+- **估計斜率 (a):** `{estimated_slope:.3f}`
+- **估計截距 (b):** `{estimated_intercept:.3f}`
 """)
-st.markdown(f"**Fitted Equation:** $y = {estimated_slope:.3f}x + {estimated_intercept:.3f}$")
+st.markdown(f"**擬合方程式:** $y = {estimated_slope:.3f}x + {estimated_intercept:.3f}$")
 
 # ------------------------------
 # Show Top 5 Outliers
 # ------------------------------
-st.subheader("Top 5 Outliers (Largest Residuals)")
-st.caption("The data points farthest from the fitted regression line.")
-st.dataframe(df_sorted.head(5), use_container_width=True)
+st.subheader("前 5 個離群值 (最大殘差)")
+st.caption("這些是距離擬合迴歸線最遠的資料點，它們在圖上以菱形橙色標記突出顯示。")
+st.dataframe(top_outliers, use_container_width=True)

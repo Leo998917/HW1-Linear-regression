@@ -1,6 +1,20 @@
-作業報告：簡單線性迴歸分析 (Simple Linear Regression Analysis)
-本專案旨在透過 Python (使用 Streamlit 框架) 解決一個簡單線性迴歸問題，並嚴格遵循 CRISP-DM (Cross-Industry Standard Process for Data Mining) 的六大步驟流程，達成互動式模型部署的目標。
+🎯 互動式線性迴歸分析與 CRISP-DM 流程實踐 (HW1)
+本專案使用 Python Streamlit 框架，實作一個簡單線性迴歸（Simple Linear Regression）的互動式模擬器。專案的核心目標是展示如何遵循 CRISP-DM (Cross-Industry Standard Process for Data Mining) 的六大步驟，從數據生成到網頁部署的完整流程。
 
+⚙️ 專案設置與運行 (Setup & Execution)
+預備條件
+您需要安裝以下 Python 套件：
+
+pip install streamlit numpy pandas scikit-learn matplotlib
+
+運行指令
+確保您位於 app.py 檔案的目錄下，執行以下命令啟動 Streamlit 應用程式：
+
+streamlit run app.py
+
+應用程式將會在您的瀏覽器中自動開啟（通常是 http://localhost:8501）。
+
+📋 CRISP-DM 流程報告
 1. Business Understanding (商業理解)
 目的 (Prompt):
 目標是建立一個互動式的應用程式，讓使用者能夠模擬線性資料 Y=aX+b+ϵ 的生成過程，並訓練一個簡單線性迴歸模型來估計真實的參數 a (斜率) 和 b (截距)。最終需比較模型估計值與使用者設定的真實值之間的差異，並識別高殘差的離群值 (Outliers)。
@@ -14,13 +28,14 @@
 最終應用程式使用 Streamlit 進行網頁化部署。
 
 2. Data Understanding (資料理解)
-資料來源: 本專案的資料是合成 (Synthetic) 資料，由使用者在 Streamlit 側邊欄設定參數動態生成。
+資料來源:
+本專案的資料是合成 (Synthetic) 資料，由使用者在 Streamlit 側邊欄設定參數動態生成。
 
 核心變數:
 
 自變量 (Independent Variable, X): 範圍固定為 [0,10] 的等距點。
 
-因變量 (Dependent Variable, Y): 由 Y=aX+b+ϵ 生成。
+因變量 (Dependent Variable, Y): 由 Y=aX+b+ϵ 公式生成。
 
 a: 使用者設定的真實斜率 (Slope)。
 
@@ -38,13 +53,14 @@ b: 使用者設定的真實截距 (Intercept)。
 DataFrame 建立: 將 X,Y 和後續的預測值、殘差整合成 pandas DataFrame，以方便進行殘差排序和離群值分析。
 
 4. Modeling (模型建立)
-模型選擇: 選擇 Scikit-learn 庫中的 LinearRegression 模型，這是一種基於最小平方法 (Ordinary Least Squares, OLS) 的簡單線性迴歸模型。
+模型選擇:
+選擇 Scikit-learn 庫中的 LinearRegression 模型，這是一種基於最小平方法 (Ordinary Least Squares, OLS) 的簡單線性迴歸模型。
 
 模型訓練過程:
 
 初始化: 實例化模型：model = LinearRegression()
 
-擬合: 使用準備好的 X 和 Y 資料進行訓練：model.fit(X, y)
+擬合 (Training): 使用準備好的 X 和 Y 資料進行訓練：model.fit(X, y)
 
 預測: 獲得擬合線的預測值：y_pred = model.predict(X)
 
@@ -55,7 +71,7 @@ DataFrame 建立: 將 X,Y 和後續的預測值、殘差整合成 pandas DataFra
 
 比較模型估計的斜率 (model.coef_) 和截距 (model.intercept_) 與使用者設定的真實值 (a,b)。
 
-將結果以文字格式 (例如：Markdown st.info) 顯示給使用者。
+結果在 Streamlit 介面中以文字資訊框顯示。
 
 視覺化擬合 (Qualitative):
 
@@ -68,12 +84,12 @@ pred
 ​
  ∣。
 
-將殘差最大的前 5 個資料點標記為離群值 (Outliers)，並在圖表上使用特殊的 橙色菱形 (Orange Diamond) 突出顯示，同時在下方表格中展示這些離群值的詳細資訊。
+將殘差最大的前 5 個資料點標記為離群值 (Outliers)，並在圖表上使用特殊的橙色菱形 (Orange Diamond) 突出顯示。
 
 6. Deployment (模型部署)
 框架: Streamlit
 
-本專案使用 Streamlit 框架將整個分析流程部署為一個單一的網頁應用程式：
+本專案利用 Streamlit 的強大功能，將整個分析流程部署為一個單一的網頁應用程式：
 
 用戶輸入介面: 側邊欄提供 a、雜訊和資料點數量的滑塊，滿足互動性要求。
 

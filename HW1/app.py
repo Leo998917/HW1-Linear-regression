@@ -4,16 +4,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 
-# --- Matplotlib Font Configuration for Chinese ---
-# 設置支持中文的字體，以解決圖表上文字顯示為方塊的問題。
-# 'Microsoft JhengHei' (微軟正黑體) 常用於繁體中文環境。
-try:
-    plt.rcParams['font.sans-serif'] = ['Microsoft JhengHei', 'SimHei', 'sans-serif']
-    plt.rcParams['axes.unicode_minus'] = False # 解決負號'-'顯示為方塊的問題
-except Exception as e:
-    # 如果特定字體在運行環境中不存在，則跳過，保持默認設置
-    print(f"Font configuration failed: {e}") 
-    pass 
+# ------------------------------------------------
+# NOTE: Removed Matplotlib Chinese Font Configuration
+#       to prevent square box display issues. Plot labels are now in English.
 # ------------------------------------------------
 
 # ------------------------------
@@ -71,7 +64,7 @@ st.subheader("資料點與迴歸線擬合結果")
 fig, ax = plt.subplots(figsize=(10, 5))
 
 # 1. 繪製所有資料點 (作為背景)
-ax.scatter(df["X"], df["y"], label="所有資料點", alpha=0.5, color='#1f77b4')
+ax.scatter(df["X"], df["y"], label="All Data Points", alpha=0.5, color='#1f77b4')
 
 # 2. 突出顯示殘差最大的前 5 個離群值
 ax.scatter(
@@ -82,16 +75,16 @@ ax.scatter(
     marker="D", # 使用菱形標記
     edgecolors='black',
     linewidths=1.5,
-    label=f"前 {len(top_outliers)} 個離群值"
+    label=f"Top {len(top_outliers)} Outliers" # 標籤改為英文
 )
 
 # 3. 繪製真實線和擬合線
-ax.plot(X, y_true, color="green", linestyle='--', label=f"真實線 (y = {a:.2f}x + {b:.2f})", alpha=0.7)
-ax.plot(X, y_pred, color="red", label="擬合迴歸線", linewidth=2)
+ax.plot(X, y_true, color="green", linestyle='--', label=f"True Line (y = {a:.2f}x + {b:.2f})", alpha=0.7)
+ax.plot(X, y_pred, color="red", label="Fitted Regression Line", linewidth=2) # 標籤改為英文
 
-ax.set_title("線性迴歸擬合結果與離群值")
-ax.set_xlabel("X 值")
-ax.set_ylabel("Y 值")
+ax.set_title("Linear Regression Fit and Outliers") # 標題改為英文
+ax.set_xlabel("X Value") # 軸標籤改為英文
+ax.set_ylabel("Y Value") # 軸標籤改為英文
 ax.grid(True, linestyle=':', alpha=0.6)
 ax.legend()
 st.pyplot(fig)

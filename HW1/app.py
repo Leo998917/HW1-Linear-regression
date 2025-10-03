@@ -79,7 +79,7 @@ ax.scatter(
 )
 
 # 3. 繪製真實線和擬合線
-ax.plot(X, y_true, color="green", linestyle='--', label=f"True Line (y = {a:.2f}x + {b:.2f})", alpha=0.7)
+#ax.plot(X, y_true, color="green", linestyle='--', label=f"True Line (y = {a:.2f}x + {b:.2f})", alpha=0.7)
 ax.plot(X, y_pred, color="red", label="Fitted Regression Line", linewidth=2) # 標籤改為英文
 
 ax.set_title("Linear Regression Fit and Outliers") # 標題改為英文
